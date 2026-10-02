@@ -7,6 +7,8 @@ Repositori ini disusun untuk memenuhi tugas akademis serta menjadi referensi pra
 ---
 
 ## 📁 Struktur Repositori
+
+```text
 .
 ├── data/                                 # Seluruh dataset resmi dari repositori buku
 │   ├── house_sales.csv
@@ -20,6 +22,7 @@ Repositori ini disusun untuk memenuhi tugas akademis serta menjadi referensi pra
 ├── PracticalStatisticsChapter3.ipynb    # Chapter 3: Statistical Experiments & Significance Testing
 ├── PracticalStatisticsChapter4.ipynb    # Chapter 4: Regression and Prediction
 └── README.md                             # Rangkuman proyek & ringkasan materi
+```
 
 # 📚 Ringkasan Materi Per Chapter
 
