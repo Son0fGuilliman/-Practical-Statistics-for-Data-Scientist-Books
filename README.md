@@ -61,12 +61,10 @@ pip install scikit-learn statsmodels xgboost imbalanced-learn dmba
 ## Chapter 1: Exploratory Data Analysis (EDA)
 
 ### Estimator Lokasi & Variabilitas
-
 - **Ukuran pemusatan data**: Mean, Trimmed Mean, Median.
 - **Ukuran penyebaran data**: Standard Deviation, Interquartile Range (IQR), Median Absolute Deviation (MAD).
 
 ### Eksplorasi Distribusi Data
-
 - **Visualisasi**: Boxplot, Frequency Table, Histogram, Density Plot.
 - **Tujuan**: Mengidentifikasi skewness, kurtosis, dan keberadaan outliers.
 
@@ -92,7 +90,6 @@ pip install scikit-learn statsmodels xgboost imbalanced-learn dmba
 ## Chapter 2: Data and Sampling Distributions
 
 ### Random Sampling & Selection Bias
-
 - **Random Sampling**: Pentingnya penarikan sampel acak untuk menghindari bias sistematis.
 - **Selection Bias**: Bias yang muncul jika sampel tidak benar-benar representatif terhadap populasi.
 
