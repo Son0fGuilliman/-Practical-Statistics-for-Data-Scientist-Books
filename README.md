@@ -13,11 +13,12 @@ Repositori ini disusun untuk memenuhi tugas akademis serta menjadi referensi pra
 ├── data/                                 # Seluruh dataset resmi dari repositori buku
 │   ├── house_sales.csv
 │   ├── loans_income.csv
-│   ├── sp500_data.csv.gz
+│   ├── sp500_data.csv.gz                 # Chapter 1 & 7
 │   ├── web_page_data.csv
 │   ├── four_sessions.csv
 │   ├── click_rates.csv
-│   ├── loan_data.csv.gz                  # Chapter 5 & 6
+│   ├── housetasks.csv                    # Chapter 7
+│   ├── loan_data.csv.gz                  # Chapter 5, 6 & 7
 │   ├── loan3000.csv                      # Chapter 5 & 6
 │   ├── loan200.csv                       # Chapter 6
 │   └── full_train_set.csv.gz             # Chapter 5
@@ -27,25 +28,27 @@ Repositori ini disusun untuk memenuhi tugas akademis serta menjadi referensi pra
 ├── PracticalStatisticsChapter4.ipynb    # Chapter 4: Regression and Prediction
 ├── PracticalStatisticsChapter5.ipynb    # Chapter 5: Classification
 ├── PracticalStatisticsChapter6.ipynb    # Chapter 6: Statistical Machine Learning
+├── PracticalStatisticsChapter7.ipynb    # Chapter 7: Unsupervised Learning
 └── README.md                             # Rangkuman proyek & ringkasan materi
 ```
 
 ## ⚙️ Dependensi
 
-Chapter 1 sampai 4 memakai `pandas`, `numpy`, `scipy`, `statsmodels`, `matplotlib`, dan `seaborn`. Chapter 5 dan 6 menambah beberapa paket berikut:
+Chapter 1 sampai 4 memakai `pandas`, `numpy`, `scipy`, `statsmodels`, `matplotlib`, dan `seaborn`. Chapter 5 sampai 7 menambah beberapa paket berikut (`scipy` dan `prince` dipakai pada Chapter 7):
 
 ```bash
-pip install scikit-learn statsmodels xgboost imbalanced-learn dmba
+pip install scikit-learn statsmodels xgboost imbalanced-learn dmba scipy prince
 ```
 
 - `dmba` (paket pendamping buku) dipakai untuk menggambar dan mencetak pohon keputusan. Untuk menggambar pohon, **Graphviz** juga perlu terpasang di sistem (misalnya `sudo apt install graphviz`).
+- `prince` versi baru tidak lagi memiliki `plot_coordinates`, sehingga biplot *correspondence analysis* pada Chapter 7 digambar sendiri dengan `matplotlib`.
 - Versi XGBoost terbaru mewajibkan label numerik dan memakai `iteration_range` (bukan `ntree_limit`). Penyesuaian ini sudah dilakukan dan dijelaskan pada notebook Chapter 6.
 
 ---
 
 # 📚 Ringkasan Materi Per Chapter
 
-> Catatan ringkas mengenai konsep-konsep utama dalam statistika, eksperimen, regresi, klasifikasi, dan machine learning.
+> Catatan ringkas mengenai konsep-konsep utama dalam statistika, eksperimen, regresi, klasifikasi, machine learning, dan unsupervised learning.
 
 ## Daftar Isi
 
@@ -55,16 +58,19 @@ pip install scikit-learn statsmodels xgboost imbalanced-learn dmba
 - [Chapter 4: Regression and Prediction](#chapter-4-regression-and-prediction)
 - [Chapter 5: Classification](#chapter-5-classification)
 - [Chapter 6: Statistical Machine Learning](#chapter-6-statistical-machine-learning)
+- [Chapter 7: Unsupervised Learning](#chapter-7-unsupervised-learning)
 
 ---
 
 ## Chapter 1: Exploratory Data Analysis (EDA)
 
 ### Estimator Lokasi & Variabilitas
+
 - **Ukuran pemusatan data**: Mean, Trimmed Mean, Median.
 - **Ukuran penyebaran data**: Standard Deviation, Interquartile Range (IQR), Median Absolute Deviation (MAD).
 
 ### Eksplorasi Distribusi Data
+
 - **Visualisasi**: Boxplot, Frequency Table, Histogram, Density Plot.
 - **Tujuan**: Mengidentifikasi skewness, kurtosis, dan keberadaan outliers.
 
@@ -90,6 +96,7 @@ pip install scikit-learn statsmodels xgboost imbalanced-learn dmba
 ## Chapter 2: Data and Sampling Distributions
 
 ### Random Sampling & Selection Bias
+
 - **Random Sampling**: Pentingnya penarikan sampel acak untuk menghindari bias sistematis.
 - **Selection Bias**: Bias yang muncul jika sampel tidak benar-benar representatif terhadap populasi.
 
@@ -234,3 +241,44 @@ Metode *supervised* yang digerakkan oleh data (tanpa struktur linear global). Ga
 - **XGBoost**: implementasi efisien stochastic gradient boosting dengan parameter `learning_rate`, `subsample`, `max_depth`, `n_estimators`.
 - **Regularization**: `reg_lambda` (L2) dan `reg_alpha` (L1) menekan overfitting. Pada data pinjaman, model tanpa regularisasi sangat overfit.
 - **Cross-validation**: wajib untuk memilih hyperparameter; pohon dangkal dengan learning rate kecil umumnya paling stabil.
+
+---
+
+## Chapter 7: Unsupervised Learning
+
+*Unsupervised learning* mengekstrak makna dari data **tanpa melatih model pada data berlabel**: tidak ada pembedaan antara variabel respons dan prediktor. Kegunaannya: mengelompokkan data (*clustering*), mereduksi dimensi, dan memperluas analisis eksploratif pada data dengan banyak variabel. *Clustering* juga membantu mengatasi masalah *cold-start* (belum ada data respons untuk melatih model).
+
+### Principal Components Analysis (PCA)
+
+- **Ide**: Meringkas banyak variabel numerik yang saling berkovariasi menjadi sedikit **komponen utama**, yaitu kombinasi linear berbobot (*loadings*) yang saling tidak berkorelasi dan berurutan menurut varians yang dijelaskan.
+- **Alat bantu**: *screeplot* untuk memilih jumlah komponen (misalnya sampai varians kumulatif 80%) dan *loading plot* untuk menafsirkan makna tiap komponen. Pada data saham, PC1 mencerminkan tren pasar, dan komponen berikutnya mengontraskan kelompok saham (misalnya energi vs lainnya).
+- **Hitungan**: komponen adalah *eigenvector* matriks kovarians dan variansnya adalah *eigenvalue*. Hanya untuk data numerik.
+
+### Correspondence Analysis
+
+- **Ide**: Teknik serupa PCA untuk **data kategorikal** (tabel kontingensi), menghasilkan *biplot* yang memperlihatkan asosiasi antarkategori lewat kedekatan titik.
+- **Catatan**: dipakai untuk analisis grafis data berdimensi rendah, bukan untuk reduksi dimensi pada *big data*.
+
+### K-Means Clustering
+
+- **Ide**: Membagi data menjadi $K$ *cluster* dengan meminimalkan *within-cluster sum of squares* (jumlah kuadrat jarak record ke rata-rata *cluster*-nya).
+- **Algoritma**: menetapkan record ke rata-rata terdekat, lalu menghitung ulang rata-rata, berulang sampai konvergen. Hasilnya optimum lokal, sehingga dijalankan beberapa kali (`n_init`).
+- **Memilih K**: tidak ada metode baku. Dipakai metode siku (*elbow*) dan pertimbangan praktis. Data harus diskalakan (standardisasi).
+
+### Hierarchical Clustering
+
+- **Ide**: Algoritma aglomeratif dimulai dari tiap record sebagai *cluster* sendiri, lalu menggabungkan *cluster* paling mirip secara bertahap. Hasilnya ditampilkan sebagai **dendrogram**, dan jumlah *cluster* tidak perlu ditentukan di awal.
+- **Ukuran ketidakmiripan**: *complete*, *single*, *average*, dan *ward* (minimum variance, paling mirip K-means). Hasil tiap ukuran sangat berbeda.
+- **Kelemahan**: tidak *scalable* untuk data sangat besar.
+
+### Model-Based Clustering
+
+- **Ide**: Tiap record diasumsikan berasal dari salah satu dari $K$ **distribusi normal multivariat** (campuran distribusi normal) dengan rata-rata dan matriks kovarians masing-masing.
+- **Memilih jumlah *cluster***: memakai **BIC** (kecocokan model dengan penalti jumlah parameter). Pada data return saham, dipilih dua komponen: satu di tengah (varians kecil) dan satu di tepi (varians besar).
+- **Keterbatasan**: bergantung pada asumsi model dan komputasinya lebih berat.
+
+### Scaling and Categorical Variables
+
+- **Penskalaan**: variabel berskala besar mendominasi PCA dan K-means jika tidak distandardisasi. Variabel dominan seperti GOOGL dan AMZN dapat menguasai komponen utama.
+- **Jarak Gower**: menskalakan variabel campuran numerik dan kategorikal ke rentang 0 sampai 1 (numerik = selisih terhadap rentang, kategorikal = 0 atau 1), cocok dengan *hierarchical clustering* untuk data kecil.
+- **Data biner pada K-means**: setelah standardisasi, variabel biner mendominasi *cluster*. Solusinya mengecilkan skalanya atau melakukan *clustering* terpisah per kategori.
